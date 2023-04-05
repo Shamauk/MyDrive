@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyDrive Sign-In</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .background {
+        background-color: #EDF4FF;
+      }
+
+      /* Set the container styles */
+      .container {
+        background-color: #EDF4FF;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 80vh;
+        width: 70%;
+        margin: 0 auto;
+        border-radius: 40px;
+        background-color: #2149AE;
+      }
+      
+      body{
+        font-family: Roboto;
+        background-color: #EDF4FF;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .logo {
+        width: 30%;
+        height: auto;
+        margin-right: 10%;
+      }
+
+      /* Set the login form styles */
+      .login-form {
+        height: 80%;
+        width: 40%;
+        padding: 40px;
+        margin-right: 10%;
+        border-radius: 40px;
+        background-color: #fff;
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+      }
+
+      .login-form h2 {
+        text-align: left;
+        font-size: 35px;
+        margin-top: 15%;
+        margin-bottom: 15%;
+        margin-left: 10px;
+      }
+
+      /* Add some spacing for the form elements */
+      .login-form label {
+        margin-bottom: 0px;
+      }
+      .login-form input {
+        margin-bottom: 10%;
+        padding: 3px;
+        height: 12%;
+        border: none;
+        border-radius: 40px;
+        padding-left: 10%;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        font-size: 25px;
+        width: 100%;
+      }
+
+      /* Style the login button */
+      .login-form button {
+        background-color: #5388D8;
+        margin-top: 12%;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        border-radius: 40px;
+        cursor: pointer;
+        font-size: 22px;
+        width: 40%;
+        margin-left: 60%;
+      }
+
+      /* Change the button color when hovered */
+      .login-form button:hover {
+        background-color: #2149AE;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="img/icons/LogoFinalWhite.png" alt="MyDrive Logo" class="logo">
+      <form class="login-form" id="login-form">
+        <h2>Welcome!</h2>
+        <input type="username" required name="username" placeholder="Username"required />
+        <input type="password" required name="password" placeholder="Password"required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    async function handleSubmit(event) {
+      event.preventDefault(); // Prevent default form submission behavior
+
+      const formData = new FormData(event.target); // Get form data
+      const jsonData = Object.fromEntries(formData); // Convert FormData to a plain object
+
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jsonData),
+      });
+      if (response.status == 200) {
+        window.location.href = "/";
+      } else {
+        alert("Failed to login, check credentials");
+      }
+    }
+    document
+      .getElementById("login-form")
+      .addEventListener("submit", (event) => handleSubmit(event));
+  </script>
+</html>

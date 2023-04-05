@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyDrive</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <style>
+      .logo-container {
+        height: 12;
+        display: flex;
+        flex-direction: row;
+        align-items: end;
+        color: #002684;
+      }
+      .logo-container h3 {
+        margin: 0;
+        margin-bottom: 2px;
+        margin-left: 5px;
+        font-size: larger;
+      }
+      .logo {
+        width: 45%;
+        max-width: 80px;
+        height: auto;
+      }
+      .log-out-container {
+        height: 30px;
+        display: flex;
+        flex-direction: row;
+        align-items: end;
+        justify-content: end;
+        margin-right:10px;
+      }
+      .log-out-button {
+        border-radius: 1rem;
+        color: white;
+        background-color: #002684;
+        border: none;
+        font-size: 15px;
+        text-align: left;
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+      .log-out-button:hover {
+        font-weight: bold;
+      }
+      .left-bar {
+        padding-top: 8px;
+        height: 100vh;
+        width: 20%;
+        max-width: 200px;
+        background-color: #edf4ff;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      .storage-overview-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: end;
+        background-color: #ffffff;
+        border-radius: 1rem;
+      }
+      .storage-overview-eve-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .storage-stats-container {
+        border-radius: 1rem;
+        background-color: #ffffff;
+        margin-top: 12px;
+        padding: 10px;
+      }
+      .storage-stats-container p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .storage-stats-used {
+        display: flex;
+        align-items: center;
+      }
+      .storage-stats-available {
+        display: flex;
+        align-items: center;
+      }
+      .indicator-type {
+        margin-left: 9px;
+      }
+      .indicator-value {
+        margin-left: auto;
+      }
+      .storage-free-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #dcdcdc;
+      }
+      .storage-used-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #5388d8;
+      }
+      .user-container {
+        margin-top: 30px;
+        margin-bottom: 20px;
+        padding-top: 1px;
+        width: 100%;
+        height: 180px;
+        border-radius: 1rem;
+        background-color: white;
+      }
+      #user-text {
+        margin-left: 10%;
+        width: 90%;
+        height: 30px;
+        font-size: 20px;
+        color: #002684;
+      }
+      #user-name {
+        margin-top: 20px;
+        margin-left: 10%;
+        width: 90%;
+        height: 35px;
+        font-size: 30px;
+        color: #002684;
+        background-image: url('img/icons/profile.png');
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 35px 35px;
+        padding-left: 50px;
+      }
+      #overview {
+        margin-top: 20px;
+        margin-left: 5%;
+        width: 90%;
+        height: auto;
+        border-radius: 1rem;
+        background-color: white;
+      }
+      body {
+        font-family: Roboto;
+        margin: 0;
+        padding: 0;
+      }
+      .log-out-button:hover {
+        background-color: #0043a7;
+        transition: 0.1s;
+      }
+      .content-top {
+        height: 36px;
+        display: flex;
+        margin-bottom: 24px;
+      }
+      .search-field {
+        width: 80%;
+        border-radius: 1rem;
+        border: 0;
+        box-shadow: 2px 2px 12px 1px rgba(0, 0, 0, 0.25);
+        padding-left: 32px;
+        background-image: url('img/icons/search_gray.png');
+        background-repeat: no-repeat;
+        background-position: 14px center;
+        background-size: 29px 20px;
+        text-indent: 20px;
+      }
+      .search-field:focus {
+        background-image: url('img/icons/search_black.png');
+      }
+      .refresh-button {
+        margin-left: 25px;
+        width: 30px;
+        height: 30px;
+        background-image: url("img/icons/refresh-icon.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+        border: none;
+      }
+      .refresh-button:hover {
+        cursor: pointer;
+        opacity: 0.8;
+      }
+      .certificate-button {
+        margin-left: 5px;
+        width: 30px;
+        height: 30px;
+        background-image: url("img/icons/certificate-icon.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+        border: none;
+      }
+      .certificate-button:hover {
+        cursor: pointer;
+        opacity: 0.8;
+      }
+      .file-input-container {
+        display: flex;
+        align-items: center;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        cursor: pointer;
+        height: 50px;
+        width: 180px;
+      }
+      .upload-icon {
+        width: 40px;
+        height: 30px;
+        margin-right: 10px;
+      }
+      .file-label {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        height: 25px;
+        width: 80px;
+        background-color: #0053d0;
+        color: white;
+        border-radius: 2rem;
+        cursor: pointer;
+      }
+      .file-label:hover {
+        background-color: #0043a7;
+        transition: 0.1s;
+      }
+      #file-input {
+        display: none;
+      }
+      body {
+        font-family: Roboto;
+        background-color: #edf4ff;
+        overflow-x: hidden;
+      }
+      .content {
+        margin-left: min(20%, 200px);
+        padding: 20px;
+        width: 90%;
+        height: 100vh;
+        border-radius: 3rem;
+        background-color: white;
+        box-sizing: border-box;
+      }
+      .folder-name {
+        margin: 0;
+        cursor: pointer;
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .folder-name p {
+        display: inline-block;
+        margin-left: 7px;
+      }
+      .folder-name .folder-icon {
+        height: auto;
+        width: 17px;
+        margin-left: 5px;
+      }
+      .folder-name .right-arrow {
+        height: auto;
+        width: 5px;
+      }
+      .folder-name .down-arrow {
+        width: auto;
+        height: 5px;
+      }
+      .folder-name p:hover {
+        font-weight: bold;
+      }
+      .folder ul,
+      li {
+        list-style-type: none;
+        margin: 0;
+      }
+      .collapsed > .file-list {
+        display: none;
+      }
+      .file {
+        position: relative;
+      }
+      .buttons-container {
+        position: absolute;
+        display: none;
+        width: 200px;
+        z-index: 2;
+      }
+
+      .spinner-container {
+        display: inline-block;
+      }
+
+      .spinner {
+        display: none;
+        width: 30px;
+        height: 30px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #333;
+        border-radius: 50%;
+        animation: spinner 1s linear infinite;
+      }
+
+      @keyframes spinner {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        text-align: center;
+      }
+
+      #progress-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #ddd;
+        position: relative;
+      }
+
+      #progress-bar-inner {
+        height: 100%;
+        width: 0;
+        background-color: #4caf50;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      #container {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+      }
+      #dummy {
+        margin-top: 100%;
+      }
+      .piechart {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-image: conic-gradient(#5388d8 70deg, #dcdcdc 0);
+      }
+
+      .file-name-wrapper {
+        transition: background-color 0.3s ease;
+        display: inline-block;
+        padding: 2px 5px;
+        border-radius: 3px;
+      }
+
+      .file-name-wrapper:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      .file-container {
+        position: relative;
+        display: inline-block;
+        padding: 5px;
+      }
+
+      .buttons-container {
+        position: absolute;
+        background-color: #ffffff;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        z-index: 100;
+        width: auto;
+        min-width: 40px;
+        height: 40px;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        top: -50%;
+        transform: translateX(-50%);
+        background-color: #a3c8fff0;
+        padding: 12px;
+      }
+
+      .buttons-container:hover {
+        height: auto;
+        border-radius: 1rem;
+      }
+
+      .buttons-container-button {
+        color: #002684;
+        display: none;
+        line-height: 0.5;
+      }
+
+      .buttons-container-button:hover {
+        cursor: pointer;
+        color: #3056b4;
+        transform: scale(1.1);
+      }
+
+      .fab:hover .buttons-container-button {
+        display: block;
+      }
+
+      .file:hover .buttons-container {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="left-bar">
+      <div>
+        <div class="logo-container">
+          <img src="/img/logo-dark-blue.png" alt="MyDrive Logo" class="logo" />
+          <h3>MyDrive</h3>
+        </div>
+        <div class="user-container">
+          <p id="user-text">User</p>
+          <p id="user-name"></p>
+          <div class="log-out-container">
+            <button
+              class="log-out-button"
+              onclick="window.location.href='/logout';"
+            >
+              Log out
+            </button>
+          </div>
+        </div>
+        <div class="storage-overview-container">
+          <div class="storage-overview-eve-container">
+            <div id="container">
+              <div id="dummy"></div>
+              <div class="piechart"></div>
+            </div>
+            <div class="storage-stats-container">
+              <div class="storage-stats-used">
+                <div class="storage-used-indicator"></div>
+                <p class="indicator-type">Used</p>
+                <p id="used-text" class="indicator-value"></p>
+              </div>
+              <div class="storage-stats-available">
+                <div class="storage-free-indicator"></div>
+                <p class="indicator-type">Free</p>
+                <p id="available-text" class="indicator-value"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br />
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-top">
+        <input
+          type="text"
+          id="search-field"
+          class="search-field"
+          placeholder="Search your files"
+        />
+        <button class="refresh-button" id="fetch-files-btn"></button>
+        <button
+          class="certificate-button"
+          onclick="window.location.href='/certificate';"
+        ></button>
+      </div>
+
+      <div class="file-input-container" id="file-input-container">
+        <img
+          src="/img/icons/upload-icon.png"
+          alt="Upload Icon"
+          class="upload-icon"
+        />
+        <p class="file-label">Upload File</p>
+        <input id="file-input" type="file" name="file" />
+      </div>
+
+      <!-- Test viewing all file names -->
+      <div id="file-list"></div>
+
+      <!-- Modal w/ progress bar -->
+      <div id="upload-modal" class="modal">
+        <div class="modal-content">
+          <span id="message"></span>
+          <div id="progress-bar">
+            <div id="progress-bar-inner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SCRIPT -->
+    <script>
+      /* VARS */
+      var filePaths = [];
+      const uploadInput = document.getElementById("file-input");
+      const fileInputContainer = document.getElementById(
+        "file-input-container"
+      );
+
+      async function uploadFile(event) {
+        event.preventDefault();
+
+        const uploadAbortController = new AbortController();
+        const file = uploadInput.files[0];
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = function (event) {
+          if (event.lengthComputable) {
+            const uploadPercentage = (
+              (event.loaded / event.total) *
+              100
+            ).toFixed(0);
+            updateProgressBar(uploadPercentage);
+          }
+        };
+
+        xhr.onload = function () {
+          if ((xhr.status = 200)) {
+            fetchFileNames();
+          } else {
+            alert("failed to upload file");
+          }
+          hideModal();
+        };
+
+        xhr.onerror = function () {
+          console.error("Error uploading file");
+          hideModal();
+        };
+
+        xhr.open("POST", "/file", true);
+        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+        xhr.setRequestHeader("X-File-Name", file.name);
+        xhr.send(file);
+      }
+
+      function showModal() {
+        document.getElementById("upload-modal").style.display = "block";
+      }
+
+      function hideModal() {
+        document.getElementById("upload-modal").style.display = "none";
+        updateProgressBar(0);
+      }
+
+      function updateProgressBar(progress) {
+        const progressBarInner = document.getElementById("progress-bar-inner");
+        const message = document.getElementById("message");
+
+        progressBarInner.style.width = progress + "%";
+        message.textContent = progress + "% uploaded";
+      }
+
+      async function deleteFile(fileName) {
+        try {
+          const response = await fetch("/file/" + fileName, {
+            method: "DELETE",
+          });
+
+          if (response.status != 200) {
+            alert("Failed to delete file");
+            return;
+          }
+
+          // Refresh the file list after a successful delete
+          fetchFileNames();
+        } catch (error) {
+          console.error("Error deleting file:", error);
+        }
+      }
+
+      async function renameFile(oldFilePath) {
+        let newFileName = prompt(
+          "Enter the new file name (include file extension):"
+        );
+        if (!newFileName) {
+          return;
+        }
+        newFileName = newFileName.replaceAll(" ", "");
+
+        try {
+          const response = await fetch(
+            "/file/" +
+              oldFilePath.replace(/^\/+/, "") +
+              "?new_file_name=" +
+              encodeURIComponent(newFileName),
+            {
+              method: "PATCH",
+            }
+          );
+
+          if (response.status != 200) {
+            alert("Failed to rename file");
+            return;
+          }
+
+          // Refresh the file list after a successful rename
+          fetchFileNames();
+        } catch (error) {
+          console.error("Error renaming file:", error);
+        }
+      }
+
+      async function moveFile(oldFilePath) {
+        const newFilePathInput = prompt(
+          "Enter the new file directories (e.g) images/:"
+        );
+        if (!newFilePathInput) {
+          alert("Please type in somewhere to move");
+          return;
+        }
+        let newFilePath = newFilePathInput.endsWith("/")
+          ? newFilePathInput
+          : newFilePathInput + "/";
+
+        newFilePath = newFilePath.replace(/^\/+/, "");
+        newFilePath = newFilePath.replaceAll(" ", "");
+
+        // Ensure not moving to trash
+        if (newFilePath.startsWith("trash")) {
+          alert("You cannot move file to trash, try deleting instead");
+          return;
+        }
+
+        const parts = oldFilePath.split("/");
+
+        try {
+          const response = await fetch(
+            "/file/move/" +
+              oldFilePath.replace(/^\/+/, "") +
+              "?new_file_path=" +
+              newFilePath +
+              parts[parts.length - 1],
+            {
+              method: "PUT",
+            }
+          );
+
+          if (response.status != 200) {
+            alert("Failed to move file");
+            return;
+          }
+
+          // Refresh the file list after a successful move
+          fetchFileNames();
+        } catch (error) {
+          console.error("Error moving file:", error);
+        }
+      }
+
+      function createFileTree(filePaths) {
+        const root = { name: "/", children: {} };
+
+        for (const filePath of filePaths) {
+          let currentNode = root;
+          const parts = filePath.split("/");
+
+          for (const part of parts) {
+            if (!currentNode.children[part]) {
+              currentNode.children[part] = { name: part, children: {} };
+            }
+            currentNode = currentNode.children[part];
+          }
+        }
+
+        return root;
+      }
+
+      let activeFile = null;
+
+      function populateFolder(folderNode, parentElement, currentPath = "") {
+        const folder = document.createElement("li");
+        folder.id = currentPath + folderNode.name;
+        folder.classList.add("folder", "collapsed");
+        const folderName = document.createElement("span");
+        const dirArrow = document.createElement("img");
+        dirArrow.classList.add("folder-arrow");
+        dirArrow.src = "/img/icons/right-arrow.png";
+        dirArrow.classList.add("right-arrow");
+
+        const folderIcon = document.createElement("img");
+        folderIcon.src = "/img/icons/folder.png";
+        folderIcon.classList.add("folder-icon");
+
+        const folderText = document.createElement("p");
+        folderText.textContent = folderNode.name;
+
+        folderName.classList.add("folder-name");
+        folderName.addEventListener("click", () => {
+          folder.classList.toggle("collapsed");
+          if (dirArrow.src.includes("/img/icons/down-arrow.png")) {
+            dirArrow.src = "/img/icons/right-arrow.png";
+            dirArrow.classList.remove("down-arrow");
+            dirArrow.classList.add("right-arrow");
+          } else {
+            dirArrow.src = "/img/icons/down-arrow.png";
+            dirArrow.classList.remove("right-arrow");
+            dirArrow.classList.add("down-arrow");
+          }
+        });
+        folderName.appendChild(dirArrow);
+        folderName.appendChild(folderIcon);
+        folderName.appendChild(folderText);
+        folder.appendChild(folderName);
+
+        let fileList = document.createElement("ul");
+        fileList.classList.add("file-list");
+
+        let newPath = currentPath + folderNode.name + "/";
+        if (folderNode.name == "/") {
+          newPath = "";
+        }
+
+        for (const childNode of Object.values(folderNode.children)) {
+          if (Object.keys(childNode.children).length === 0) {
+            // If the node has no children, it's a file
+            const fileContainer = document.createElement("div");
+            fileContainer.classList.add("file-container");
+
+            const fileNameWrapper = document.createElement("span");
+            fileNameWrapper.classList.add("file-name-wrapper");
+            fileNameWrapper.textContent = childNode.name;
+
+            fileContainer.appendChild(fileNameWrapper);
+
+            const buttonsContainer = document.createElement("div");
+            buttonsContainer.classList.add("buttons-container", "fab");
+            fileContainer.appendChild(buttonsContainer);
+
+            let fileFullPath = newPath + childNode.name;
+            fileContainer.id = fileFullPath;
+
+            const downloadBtn = document.createElement("p");
+            downloadBtn.textContent = "Download";
+            downloadBtn.classList.add("buttons-container-button");
+            downloadBtn.addEventListener("click", (event) => {
+              window.location.href = "/file/" + fileFullPath;
+              event.stopPropagation();
+            });
+
+            const deleteBtn = document.createElement("p");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.classList.add("buttons-container-button");
+            deleteBtn.addEventListener("click", (event) => {
+              deleteFile(fileFullPath);
+              event.stopPropagation();
+            });
+
+            const renameBtn = document.createElement("p");
+            renameBtn.textContent = "Rename";
+            renameBtn.classList.add("buttons-container-button");
+            renameBtn.addEventListener("click", (event) => {
+              renameFile(fileFullPath);
+              event.stopPropagation();
+            });
+
+            const moveBtn = document.createElement("p");
+            moveBtn.textContent = "Move";
+            moveBtn.classList.add("buttons-container-button");
+            moveBtn.addEventListener("click", () => {
+              moveFile(fileFullPath);
+              event.stopPropagation();
+            });
+
+            buttonsContainer.appendChild(downloadBtn);
+            buttonsContainer.appendChild(deleteBtn);
+            buttonsContainer.appendChild(renameBtn);
+            buttonsContainer.appendChild(moveBtn);
+            fileList.appendChild(fileContainer);
+
+            // event listener for showing/hiding buttons container
+            fileNameWrapper.addEventListener("click", (event) => {
+              if (activeFile && activeFile !== fileContainer) {
+                activeFile.querySelector(".buttons-container").style.display =
+                  "none";
+              }
+              activeFile = fileContainer;
+              fileContainer.querySelector(".buttons-container").style.display =
+                "block";
+              buttonsContainer.style.left =
+                event.clientX - Math.min(200, screen.width * 0.2) + "px";
+              event.stopPropagation();
+            });
+
+            // event listener for hiding buttons container when clicking anywhere else
+            document.addEventListener("click", (event) => {
+              if (activeFile && !activeFile.contains(event.target)) {
+                activeFile.querySelector(".buttons-container").style.display =
+                  "none";
+                activeFile = null;
+              }
+            });
+          } else {
+            // If the node has children, it's a folder
+            populateFolder(childNode, fileList, newPath);
+          }
+        }
+
+        folder.appendChild(fileList);
+        parentElement.appendChild(folder);
+      }
+
+      async function fetchFileNames() {
+        try {
+          const response = await fetch("/file");
+          if (!response.ok) {
+            console.error("Failed to fetch file names:", response.statusText);
+            return;
+          }
+          if (!response) return;
+          filePaths = await response.json();
+
+          const expandedFoldersPaths = getExpandedFoldersPaths();
+
+          const fileList = document.getElementById("file-list");
+          fileList.innerHTML = "";
+
+          const fileTree = createFileTree(filePaths);
+          populateFolder(fileTree, fileList);
+
+          expandPreviouslyExpandedFolders(expandedFoldersPaths, fileList);
+
+          updateState();
+          updateStorageChart();
+        } catch (error) {
+          console.error("Error fetching file names:", error);
+        }
+      }
+
+      function getExpandedFoldersPaths() {
+        const expandedFolders = document.querySelectorAll(
+          ".folder:not(.collapsed)"
+        );
+        const expandedFoldersPaths = Array.from(expandedFolders).map(
+          (folder) => folder.id
+        );
+
+        return expandedFoldersPaths;
+      }
+
+      function expandPreviouslyExpandedFolders(expandedFoldersPaths) {
+        for (const expandedFolderPath of expandedFoldersPaths) {
+          const folder = document.getElementById(expandedFolderPath);
+          if (folder) {
+            folder.classList.remove("collapsed");
+            const dirArrow = folder.querySelector(".folder-arrow");
+            dirArrow.src = "/img/icons/down-arrow.png";
+            dirArrow.classList.remove("right-arrow");
+            dirArrow.classList.add("down-arrow");
+          }
+        }
+      }
+
+      const searchField = document.getElementById("search-field");
+      searchField.addEventListener("input", updateState);
+
+      function updateState() {
+        const searchTerm = searchField.value;
+
+        for (let path of filePaths) {
+          document.getElementById(path).style.display = "block";
+        }
+
+        if (searchTerm == "") return;
+
+        const filteredSearch = filePaths.filter(
+          (path) => !path.toLowerCase().includes(searchTerm)
+        );
+
+        for (let pathToBeHidden of filteredSearch) {
+          document.getElementById(pathToBeHidden).style.display = "none";
+        }
+      }
+
+      async function updateStorageChart() {
+        try {
+          const response = await fetch("/sysinfo");
+          const sysInfo = await response.json();
+
+          const total = parseInt(sysInfo.total);
+          const used_raw = parseInt(sysInfo.used);
+          const available_raw = parseInt(sysInfo.available);
+          const used = parseInt(sysInfo.used) / total;
+          const available = parseInt(sysInfo.available) / total;
+
+          const usedAngle = used * 360;
+
+          const piechart = document.querySelector(".piechart");
+
+          piechart.style.backgroundImage = `conic-gradient(#5388D8 ${usedAngle}deg, #DCDCDC 0 ${usedAngle}deg)`;
+
+          const usedText = document.querySelector("#used-text");
+          usedText.textContent = formatFileSize(used_raw);
+          const availableText = document.querySelector("#available-text");
+          availableText.textContent = formatFileSize(available_raw);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+      async function fetchUserName() {
+        try {
+          const response = await fetch("/username");
+          const userName = await response.json();
+          const userNameElement = document.querySelector("#user-name");
+          userNameElement.textContent = userName;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+      function formatFileSize(sizeInKb) {
+        const units = ["KB", "MB", "GB", "TB"];
+        let convertedSize = sizeInKb;
+        let unitIndex = 0;
+        while (convertedSize >= 1024 && unitIndex < units.length - 1) {
+          convertedSize /= 1024;
+          unitIndex++;
+        }
+        return `${convertedSize.toFixed(0)} ${units[unitIndex]}`;
+      }
+
+      async function fetchSysInfo() {
+        try {
+          const response = await fetch("/sysinfo");
+          const sysInfo = await response.json();
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+      // Call the function to fetch and display file names when the page loads
+      window.addEventListener("DOMContentLoaded", fetchFileNames);
+      window.addEventListener("DOMContentLoaded", fetchSysInfo);
+      window.addEventListener("DOMContentLoaded", fetchUserName);
+      const fetchFilesBtn = document.getElementById("fetch-files-btn");
+      fetchFilesBtn.addEventListener("click", fetchFileNames);
+      uploadInput.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+      fileInputContainer.addEventListener("click", () => {
+        uploadInput.click();
+        event.stopPropagation();
+      });
+      uploadInput.addEventListener("change", (event) => {
+        showModal();
+        uploadFile(event);
+      });
+    </script>
+  </body>
+</html>
