@@ -4,4 +4,4 @@ target/
 users.csv
 Cargo.lock
 Rocket.toml
-.DS_Store
+**/.DS_Store
