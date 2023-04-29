@@ -1,12 +1,9 @@
 [package]
-name = "mydrive"
+name = "hello-rocket"
 version = "0.1.0"
 edition = "2021"
-authors = ["Zachary Doucet"]
-description = "Locally hosted cloud storage solution, capable of running on SBCs"
-repository = "https://github.com/Shamauk/MyDrive"
-readme = "https://github.com/Shamauk/MyDrive/README.md"
-keywords = ["storage", "cloud storage", "self hosted"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 rocket = { version = "0.5.0-rc.3", features = ["tls", "json", "secrets"] }
@@ -16,4 +13,6 @@ tokio = { version = "1.26.0", features = ["full"] }
 rocket-multipart-form-data = "0.10.5"
 async-recursion = "1.0.4"
 rand = "0.8.5"
+base64 = "0.21.0"
+hex = "0.4.3"
 argon2 = "0.5.0"

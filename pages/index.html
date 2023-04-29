@@ -33,7 +33,7 @@
         flex-direction: row;
         align-items: end;
         justify-content: end;
-        margin-right:10px;
+        margin-right: 10px;
       }
       .log-out-button {
         border-radius: 1rem;
@@ -53,8 +53,8 @@
       .left-bar {
         padding-top: 8px;
         height: 100vh;
-        width: 20%;
-        max-width: 200px;
+        width: 25%;
+        max-width: 250px;
         background-color: #edf4ff;
         position: fixed;
         left: 0;
@@ -63,6 +63,9 @@
         flex-direction: column;
         align-items: center;
         box-sizing: border-box;
+      }
+      .left-bar-spacer {
+        width: 85%;
       }
       .storage-overview-container {
         width: 100%;
@@ -136,7 +139,7 @@
         height: 35px;
         font-size: 30px;
         color: #002684;
-        background-image: url('img/icons/profile.png');
+        background-image: url("img/icons/profile.png");
         background-repeat: no-repeat;
         background-position: left center;
         background-size: 35px 35px;
@@ -170,14 +173,14 @@
         border: 0;
         box-shadow: 2px 2px 12px 1px rgba(0, 0, 0, 0.25);
         padding-left: 32px;
-        background-image: url('img/icons/search_gray.png');
+        background-image: url("img/icons/search_gray.png");
         background-repeat: no-repeat;
         background-position: 14px center;
         background-size: 29px 20px;
         text-indent: 20px;
       }
       .search-field:focus {
-        background-image: url('img/icons/search_black.png');
+        background-image: url("img/icons/search_black.png");
       }
       .refresh-button {
         margin-left: 25px;
@@ -215,26 +218,29 @@
         right: 20px;
         cursor: pointer;
         height: 50px;
-        width: 180px;
+        width: 200px;
       }
       .upload-icon {
-        width: 40px;
-        height: 30px;
-        margin-right: 10px;
+        position: absolute;
+        left: 20px;
+        width: 35px;
+        height: 35px;
+        z-index: 2;
       }
       .file-label {
         display: flex;
         align-items: center;
         padding: 10px 20px;
         height: 25px;
-        width: 80px;
-        background-color: #0053d0;
+        width: 120px;
+        background-color: #5388d8;
+        padding-left: 70px;
         color: white;
         border-radius: 2rem;
         cursor: pointer;
       }
       .file-label:hover {
-        background-color: #0043a7;
+        background-color: #0053d0;
         transition: 0.1s;
       }
       #file-input {
@@ -246,7 +252,7 @@
         overflow-x: hidden;
       }
       .content {
-        margin-left: min(20%, 200px);
+        margin-left: min(25%, 250px);
         padding: 20px;
         width: 90%;
         height: 100vh;
@@ -370,8 +376,10 @@
         bottom: 0;
         left: 0;
         right: 0;
-        width: 100%;
-        height: 100%;
+        width: 80%;
+        height: 80%;
+        margin-top: 10%;
+        margin-left: 10%;
         border-radius: 50%;
         background-image: conic-gradient(#5388d8 70deg, #dcdcdc 0);
       }
@@ -441,7 +449,7 @@
   </head>
   <body>
     <div class="left-bar">
-      <div>
+      <div class="left-bar-spacer">
         <div class="logo-container">
           <img src="/img/logo-dark-blue.png" alt="MyDrive Logo" class="logo" />
           <h3>MyDrive</h3>
@@ -498,11 +506,11 @@
 
       <div class="file-input-container" id="file-input-container">
         <img
-          src="/img/icons/upload-icon.png"
+          src="/img/icons/upload_4x.png"
           alt="Upload Icon"
           class="upload-icon"
         />
-        <p class="file-label">Upload File</p>
+        <p class="file-label">Upload</p>
         <input id="file-input" type="file" name="file" />
       </div>
 
@@ -524,6 +532,7 @@
       /* VARS */
       var filePaths = [];
       const uploadInput = document.getElementById("file-input");
+      const fileInputLabel = document.querySelector(".file-label");
       const fileInputContainer = document.getElementById(
         "file-input-container"
       );
@@ -893,11 +902,67 @@
           document.getElementById(path).style.display = "block";
         }
 
+        const folders = document.querySelectorAll(".folder");
+        for (folder of folders) {
+          folder.style.display = "block";
+        }
+
         if (searchTerm == "") return;
 
+        // Get all the filepaths that should not be visible
         const filteredSearch = filePaths.filter(
-          (path) => !path.toLowerCase().includes(searchTerm)
+          (path) => !path.toLowerCase().includes(searchTerm.toLowerCase())
         );
+
+        const visibleFiles = filePaths.filter(
+          (path) => !filteredSearch.includes(path)
+        );
+
+        const foldersToHide = new Set();
+        const foldersToExpand = new Set();
+
+        // Get all the folders to see if they should be expanded or hidden
+        for (const folder of document.querySelectorAll(".folder")) {
+          if (folder.id == "/") {
+            foldersToExpand.add("/");
+            continue;
+          }
+          let folderVisible = false;
+          const folderPath = folder.id;
+
+          for (const visibleFilePath of visibleFiles) {
+            if (visibleFilePath.startsWith(folderPath)) {
+              folderVisible = true;
+              foldersToExpand.add(folderPath);
+              break;
+            }
+          }
+
+          if (!folderVisible) {
+            foldersToHide.add(folderPath);
+          }
+        }
+
+        // Hide folders that don't have any matching files inside
+        for (const folderPath of foldersToHide) {
+          const folder = document.getElementById(folderPath);
+          if (folder) {
+            folder.style.display = "none";
+          }
+        }
+
+        // Expand folders containing matching files
+        for (const folderPath of foldersToExpand) {
+          const folder = document.getElementById(folderPath);
+          if (folder) {
+            folder.classList.remove("collapsed");
+            const dirArrow = folder.querySelector(".folder-arrow");
+            dirArrow.src = "/img/icons/down-arrow.png";
+            dirArrow.classList.remove("right-arrow");
+            dirArrow.classList.add("down-arrow");
+            folder.style.display = "block";
+          }
+        }
 
         for (let pathToBeHidden of filteredSearch) {
           document.getElementById(pathToBeHidden).style.display = "none";
