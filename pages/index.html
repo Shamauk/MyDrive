@@ -541,38 +541,56 @@
         event.preventDefault();
 
         const uploadAbortController = new AbortController();
-        const file = uploadInput.files[0];
 
-        const xhr = new XMLHttpRequest();
+        const files = uploadInput.files;
+        let filesProgress = Array(files.length).fill({ loaded: 0, total: 0 });
 
-        xhr.upload.onprogress = function (event) {
-          if (event.lengthComputable) {
-            const uploadPercentage = (
-              (event.loaded / event.total) *
-              100
-            ).toFixed(0);
-            updateProgressBar(uploadPercentage);
-          }
-        };
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
 
-        xhr.onload = function () {
-          if ((xhr.status = 200)) {
-            fetchFileNames();
-          } else {
-            alert("failed to upload file");
-          }
-          hideModal();
-        };
+          const xhr = new XMLHttpRequest();
 
-        xhr.onerror = function () {
-          console.error("Error uploading file");
-          hideModal();
-        };
+          xhr.upload.onprogress = function (event) {
+            if (event.lengthComputable) {
+              filesProgress[i].loaded = event.loaded;
+              filesProgress[i].total = event.total;
 
-        xhr.open("POST", "/file", true);
-        xhr.setRequestHeader("Content-Type", "application/octet-stream");
-        xhr.setRequestHeader("X-File-Name", file.name);
-        xhr.send(file);
+              const totalLoaded = filesProgress.reduce(
+                (total, progress) => total + progress.loaded,
+                0
+              );
+              const totalSize = filesProgress.reduce(
+                (total, progress) => total + progress.total,
+                0
+              );
+
+              const uploadPercentage = (
+                (totalLoaded / totalSize) *
+                100
+              ).toFixed(0);
+              updateProgressBar(uploadPercentage);
+            }
+          };
+
+          xhr.onload = function () {
+            if ((xhr.status = 200)) {
+              fetchFileNames();
+            } else {
+              alert("failed to upload file");
+            }
+            hideModal();
+          };
+
+          xhr.onerror = function () {
+            console.error("Error uploading file");
+            hideModal();
+          };
+
+          xhr.open("POST", "/file", true);
+          xhr.setRequestHeader("Content-Type", "application/octet-stream");
+          xhr.setRequestHeader("X-File-Name", file.name);
+          xhr.send(file);
+        }
       }
 
       function showModal() {
